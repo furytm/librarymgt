@@ -1,7 +1,7 @@
 import Book from '../models/book.js';
 import Borrow from '../models/borrow.js';
 
-export const borrowBook = async (bookId, user) => {
+export const borrowBookService = async (bookId, user) => {
   const book = await Book.findById(bookId);
   if (!book || book.quantity < 1) {
     throw new Error('Book unavailable');
@@ -15,7 +15,7 @@ export const borrowBook = async (bookId, user) => {
   return borrow;
 };
 
-export const returnBook = async (bookId, user) => {
+export const returnBookService = async (bookId, user) => {
   const borrow = await Borrow.findOne({ book: bookId, user: user._id, returnDate: null });
   if (!borrow) {
     throw new Error('No borrowed record found');
@@ -32,4 +32,8 @@ export const returnBook = async (bookId, user) => {
   await borrow.save();
 
   return borrow;
+};
+export const listBorrowedBooksService = async (user) => {
+  const borrowedBooks = await Borrow.find({ userId: user.id, returned: false }).populate('bookId');
+  return borrowedBooks;
 };
