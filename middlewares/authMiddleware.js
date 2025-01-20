@@ -20,6 +20,10 @@ export const authenticate = async (req, res, next) => {
     // Find the user from the database using the user ID from the verified token
     req.user = await User.findById(verified.id);
 
+    // Debugging: Log the user role
+     console.log('Users role:',req.user.role);
+
+
     // If no user is found, send an error
     if (!req.user) {
       return res.status(404).send('User not found');
