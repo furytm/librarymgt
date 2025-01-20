@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/register', validateRequest(registerSchema), register);
 // Route to log in a user
 router.post('/login', (req, res, next) => {
-    console.log('Before Validation Middleware - Request Body:', req.body);
+    // console.log('Before Validation Middleware - Request Body:', req.body);
     next(); // Pass the request to the next middleware (validation middleware)
 }, validateRequest(loginSchema), login);
 

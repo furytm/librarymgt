@@ -2,34 +2,34 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 
-export const registerUser  = async ({ name, email, password, role }) => {
+export const registerUser = async ({ name, email, password, role }) => {
   if (await User.findOne({ email })) {
     throw new Error('Email already registered');
   }
 
 
-  const user = new User({ name, email,password, role });
+  const user = new User({ name, email, password, role });
   await user.save();
   return { id: user._id, name: user.name, email: user.email, role: user.role };
 };
-export const  loginUser = async ({ email, password }) => {
+export const loginUser = async ({ email, password }) => {
 
-  
-  console.log('Service Email:', email);
-  console.log('Service Password:', password);
+
+  // console.log('Service Email:', email);
+  // console.log('Service Password:', password);
 
   if (!email || !password) {
-      throw new Error('Missing email or password');
+    throw new Error('Missing email or password');
   }
-    try {
+  try {
     // Find the user by email
     const user = await User.findOne({ email: email.toLowerCase() });
-    
+
     // Check if the user exists
     if (!user) {
       throw new Error('Invalid user');
     }
-    
+
     // Compare the hashed password with the user input password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
